@@ -39,7 +39,7 @@ else
   vim.opt.shiftwidth = 4
   vim.opt.expandtab = true
 
-  vim.cmd[[colorscheme tokyonight-moon]]
+  vim.cmd[[colorscheme tokyonight-night]]
 
   require "user.terminal_keymaps"
 end

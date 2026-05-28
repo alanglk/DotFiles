@@ -27,7 +27,7 @@ link_config() {
     # Create the symbolic link
     mkdir -p "$(dirname "$target_path")"
     ln -s "$source_path" "$target_path"
-    echo "🔗 Linked: $target_path -> $source_path"
+    echo "Linked: $target_path -> $source_path"
 }
 
 
@@ -37,7 +37,7 @@ echo "Repository directory: $DOTFILES_DIR"
 echo
 mkdir -p "$CONFIG_DIR"
 
-link_config "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
+link_config "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 
 
 # Finish
