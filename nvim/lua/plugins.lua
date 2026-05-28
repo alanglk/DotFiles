@@ -337,21 +337,43 @@ return {
             local dap = require("dap")
             local dapui = require("dapui")
 
+
             dapui.setup()
             require("nvim-dap-virtual-text").setup()
-            -- require('dap.ext.vscode').load_launchjs(nil, { gdb = {'c', 'cpp', 'cuda'} }) -- Integration with VScode launch.json
+            -- Integration with VScode launch.json
+            require('dap.ext.vscode').load_launchjs(nil, {
+                cppdbg = { "c", "cpp", "cuda" },
+            })
+
+            -- require('persistent-breakpoints').setup({ 
+            --     load_breakpoints_event = { "BufReadPost" }, 
+            -- })
+
+            dap.defaults.cpp.exception_breakpoints = { 'cpp_throw' }
+            dap.defaults.cpp.exception_breakpoints = { 'throw' } -- Microsoft's cppdbg
+            dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
 
             -- Toggle debugger layout panels automatically
             dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open() end
             dap.listeners.before.event_terminated["dapui_config"] = function() dapui.close() end
-            dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
+            -- dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
 
             dap.adapters.gdb = {
                 type = "executable",
                 command = "gdb",
                 args = { "-i", "dap" }
             }
-            dap.adapters.cppdbg = dap.adapters.gdb
+
+            local cpptools = vim.fn.glob(
+              vim.fn.expand("~/.vscode/extensions/ms-vscode.cpptools-*/debugAdapters/bin/OpenDebugAD7"),
+              false,
+              true
+            )[1]
+            dap.adapters.cppdbg = {
+                id = "cppdbg",
+                type = "executable",
+                command = cpptools,
+            }
 
             local set = vim.keymap.set
             set("n", "<F5>", dap.continue, { desc = "Debug: Start/Continue" })
