@@ -1,5 +1,13 @@
 -- ~/.config/nvim/init.lua
 
+-- remap leader key
+local keymap = vim.keymap.set
+
+keymap("n", "<Space>", "", { noremap = true, silent = true })
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+
 -- Force Neovim to use the terminal's OSC 52 escape sequences for the clipboard
 -- vim.opt.clipboard = "unnamedplus"
 vim.g.clipboard = {

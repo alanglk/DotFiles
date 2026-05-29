@@ -4,14 +4,6 @@ vim.opt.hlsearch = true -- Highlight all matches on search
 vim.opt.incsearch = true -- Show matches while typing
 
 
--- remap leader key
-local keymap = vim.keymap.set
-
-keymap("n", "<Space>", "", { noremap = true, silent = true })
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
-
 -- yank to system clipboard
 keymap({"n", "v"}, "<leader>y", '"+y', opts)
 
