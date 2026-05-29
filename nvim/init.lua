@@ -2,7 +2,6 @@
 
 -- remap leader key
 local keymap = vim.keymap.set
-
 keymap("n", "<Space>", "", { noremap = true, silent = true })
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "

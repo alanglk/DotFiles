@@ -3,6 +3,7 @@
 vim.opt.hlsearch = true -- Highlight all matches on search
 vim.opt.incsearch = true -- Show matches while typing
 
+local keymap = vim.keymap.set
 
 -- yank to system clipboard
 keymap({"n", "v"}, "<leader>y", '"+y', opts)
