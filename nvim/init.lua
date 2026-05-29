@@ -1,11 +1,19 @@
 -- ~/.config/nvim/init.lua
 
--- remap leader key
-local keymap = vim.keymap.set
-vim.opt.clipboard = "unnamedplus"
-keymap("n", "<Space>", "", { noremap = true, silent = true })
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+-- Force Neovim to use the terminal's OSC 52 escape sequences for the clipboard
+-- vim.opt.clipboard = "unnamedplus"
+vim.g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+  },
+  paste = {
+    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+  },
+}
+
 
 -- Check for lazy nvim (pluging manager)
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -26,6 +34,7 @@ require("lazy").setup("plugins")
 
 
 -- Import configuration
+require "user.common_keymaps"
 if vim.g.vscode then
   -- VSCode Neovim
   require "user.vscode_keymaps"
