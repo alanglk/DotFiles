@@ -418,12 +418,67 @@ return {
             
             -- Basic diagnostic navigation keymaps
             local set = vim.keymap.set
-            set("n", "[g", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-            set("n", "]g", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
             set("n", "K", vim.lsp.buf.hover, { desc = "LSP Hover Documentation" })
             set("n", "gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
-        end
-    }
 
+            -- Show diagnostic/error code under the cursor
+            set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Show line diagnostics' })
+            set("n", "[g", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
+            set("n", "]g", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+            set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic list' })
+
+        end
+    },
+
+    -- Bufferline to display and navigate through buffers (Terminal only)
+    {
+      'akinsho/bufferline.nvim',
+      version = "*",
+      dependencies = 'nvim-tree/nvim-web-devicons',
+      config = function()
+        -- Ensure termguicolors is enabled for highlight matching
+        vim.opt.termguicolors = true
+
+        require("bufferline").setup({
+          options = {
+            mode = "buffers", -- View open buffers, not vim tabs
+            separator_style = "slant", -- Can be "slant" | "slope" | "thick" | "thin"
+            always_show_bufferline = true,
+            show_buffer_close_icons = true,
+            show_close_icon = true,
+
+            -- LSP Diagnostics Integration (Shows your clangd errors in the tab bar!)
+            diagnostics = "nvim_lsp",
+            diagnostics_indicator = function(count, level, diagnostics_dict, context)
+              local icon = level:match("error") and " " or " "
+              return " " .. icon .. count
+            end,
+
+            -- Sidebar Offset (Prevents open tabs from rendering over your file tree)
+            offsets = {
+              {
+                filetype = "NvimTree",
+                text = "File Explorer",
+                text_align = "left",
+                separator = true,
+              },
+              {
+                filetype = "neo-tree",
+                text = "File Explorer",
+                text_align = "left",
+                separator = true,
+              }
+            },
+          }
+        })
+
+        -- Fast Keymaps for Buffer Navigation (Shift + h/l to cycle tabs)
+        vim.keymap.set('n', '<S-h>', '<cmd>BufferLineCyclePrev<cr>', { desc = 'Prev Buffer' })
+        vim.keymap.set('n', '<S-l>', '<cmd>BufferLineCycleNext<cr>', { desc = 'Next Buffer' })
+        
+        -- Close buffer cleanly without destroying your window split layout
+        vim.keymap.set('n', '<leader>bx', '<cmd>bdelete!<cr>', { desc = 'Close Buffer' })
+      end
+    }
 
 }
